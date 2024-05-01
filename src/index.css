@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@layer components{
+  .scrol::-webkit-scrollbar{
+    display: none
+  }
+}
+@tailwind utilities;
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-image: url("/bg.jpg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+
+}
+
+.item{
+  @apply flex items-center gap-5 p-4 cursor-pointer border-b-[1px] border-solid border-gray-400
+}
+
+.emg{
+  @apply w-[50px] h-[50px] object-cover rounded-[50%]
+}
+
+.text{
+  @apply flex flex-col gap-2
+}
