@@ -34,3 +34,7 @@ body{
 .text{
   @apply flex flex-col gap-2
 }
+
+.chat img{
+  @apply w-4 h-4 
+}
