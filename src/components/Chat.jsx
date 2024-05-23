@@ -1,14 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import EmojiPicker from 'emoji-picker-react'
 
 const Chat = () => {
   const [open,setOpen] = useState(false)
   const [text, setText]= useState("")
+  const endRef = useRef(null)
+
+  useEffect(()=>{
+    endRef.current?.scrollIntoView({behavior:"smooth"})
+  },[])
 
   const handleEmoji = (e) =>{
     setText((prev) => prev + e.emoji)
     setOpen(false)
   }
+
+ 
   return (
     <div className='flex-[2] border-x-[1px] flex flex-col border-x-solid border-x-gray-400 h-full'>
       <div className='p-4 flex items-center justify-between border-b-[1px] border-b-solid border-b-gray-400'>
@@ -63,7 +70,9 @@ const Chat = () => {
             <span>1 min ago</span>
           </div>
         </div>
+        <div ref={endRef}> </div>
       </div>
+      
       <div className='p-4 flex items-center mt-auto gap-2 justify-between border-y-[1px] border-solid border-gray-600'>
         <div className=' flex gap-3'>
           <img className='w-4' src="./img.png" alt="" />

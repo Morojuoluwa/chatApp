@@ -59,5 +59,9 @@ body{
 }
 
 .deet img{
-  @apply w-[100px] h-[100px] object-cover rounded-[50%]
+  @apply w-[60px] h-[60px] object-cover rounded-[50%]
+}
+
+.enput{
+  @apply p-3 border-none outline-none bg-[rgba(17,25,40,0.6)] text-white rounded-[5px]
 }
