@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '../lib/firebase'
 import { doc, setDoc } from 'firebase/firestore'
+import upload from '../lib/upload'
 
 
 const Login = () => {
+
+  const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState({
     file:null,
     url:""
@@ -26,6 +29,7 @@ const Login = () => {
   // }
 
   const handleRegister = async(e) =>{
+    setLoading(true)
     e.preventDefault()
     const formData = new FormData(e.target)
 
@@ -35,9 +39,12 @@ const Login = () => {
       const res = await createUserWithEmailAndPassword(auth, email, password)
       toast.success("e don enter")
 
+      const imgUrl = await upload(avatar.file)
+
       await setDoc(doc(db, "users", res.user.uid),{
         username,
         email,
+        avatar:imgUrl,
         id:res.user.uid,
         blocked:[]
       })
@@ -53,19 +60,36 @@ const Login = () => {
       console.log(err)
       toast.error('error')
 
+    }finally{
+      setLoading(false)
     }
   }
 
-  // const handleLogin = () =>{
-  //   e.preventDefault()
-  // }
+  const handleLogin = async (e) =>{
+    e.preventDefault()
+    setLoading(true)
+
+    const formData = new FormData(e.target)
+    const {email, password} = Object.fromEntries(formData)
+
+    try{
+      await signInWithEmailAndPassword(auth, email, password)
+      toast.success("signed in successfulyy")
+    }catch(err){
+      console.log(err)
+      toast.error('err')
+
+    }finally{
+      setLoading(false)
+    }
+  }
   return (
     <div className=' w-full h-full flex items-center gap-[80px'>
         <div className=' flex-1 flex flex-col items-center gap-4'>
             <h2>Welcome back!</h2>
-            <form action=""  className='flex flex-col items-center justify-center gap-4'>
-                <input type="text" className='enput' placeholder='Email..' name='Email' />
-                <input type="Password" className='enput' placeholder='Password' name='Password' />
+            <form onSubmit={handleLogin}  className='flex flex-col items-center justify-center gap-4'>
+                <input type="text" className='enput' placeholder='Email..' name='email' />
+                <input type="Password" className='enput' placeholder='Password' name='password' />
                 <button className=' w-full border-none p-4 bg-[#1f8ef1] text-white rounded-[5px] cursor-pointer font-medium'>Sign In</button>
             </form>
         </div>
@@ -80,7 +104,7 @@ const Login = () => {
                 <input type="text" className='enput' placeholder='Username' name='username' />
                 <input type="text" className='enput' placeholder='Email..' name='email' />
                 <input type="Password" className='enput' placeholder='Password' name='password' />
-                <button className=' w-full border-none p-4 bg-[#1f8ef1] text-white rounded-[5px] cursor-pointer font-medium'>Sign Up</button>
+                <button disabled={loading} className={` w-full border-none p-4  text-white rounded-[5px] cursor-pointer ${loading? "bg-[#1f8ff161]": "bg-[#1f8ef1]"} font-medium`}>{loading?'loading':'Sign Up'}</button>
             </form>
         </div>
     </div>
