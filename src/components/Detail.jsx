@@ -1,4 +1,5 @@
 import React from 'react'
+import { auth } from '../lib/firebase'
 
 const Detail = () => {
   return (
@@ -44,7 +45,7 @@ const Detail = () => {
         </div>
       </div>
       <button className=' cursor-pointer text-[16px] py-[4px] px-[20px] bg-[rgba(230,74,105,0.553)] hover:bg-[rgba(220,20,60,0.796)]'>Block user</button>
-      <button className='  cursor-pointer bg-[#1a73e8] py-[4px] px-[20px] text-[16px]'>LogOut</button>
+      <button onClick={()=>auth.signOut()} className='  cursor-pointer bg-[#1a73e8] py-[4px] px-[20px] text-[16px]'>LogOut</button>
      </div>
     </div>
   )

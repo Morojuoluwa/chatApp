@@ -1,9 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AddUser from './AddUser'
+import { useUserStore } from '../lib/userStore'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 const ChatList = () => {
 
     const [addMode, setAddMode] = useState(false)
+    const [chats, setChats] = useState([])
+    const {currentUser} = useUserStore()
+
+    useEffect(()=>{
+        const unSub = onSnapshot(doc(db, "userchats", currentUser.id), (doc)=>{
+            setChats(doc.data())
+        })
+
+        return ()=>{
+            unSub()
+        }
+    },[currentUser.id])
+    console.log(chats)
   return (
     <div >
       <div className='flex items-center gap-x-5 p-3'>

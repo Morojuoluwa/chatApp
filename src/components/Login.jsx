@@ -4,9 +4,12 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { auth, db } from '../lib/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import upload from '../lib/upload'
+import { useUserStore } from '../lib/userStore'
 
 
 const Login = () => {
+
+  
 
   const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState({
@@ -50,7 +53,7 @@ const Login = () => {
       })
 
       
-      await setDoc(doc(db, "userChat", res.user.uid),{
+      await setDoc(doc(db, "userschat", res.user.uid),{
        chat:[]
       })
 
@@ -58,7 +61,7 @@ const Login = () => {
       toast.success("accout created!")
     }catch(err){
       console.log(err)
-      toast.error('error')
+      toast.error('this error')
 
     }finally{
       setLoading(false)
@@ -104,7 +107,7 @@ const Login = () => {
                 <input type="text" className='enput' placeholder='Username' name='username' />
                 <input type="text" className='enput' placeholder='Email..' name='email' />
                 <input type="Password" className='enput' placeholder='Password' name='password' />
-                <button disabled={loading} className={` w-full border-none p-4  text-white rounded-[5px] cursor-pointer ${loading? "bg-[#1f8ff161]": "bg-[#1f8ef1]"} font-medium`}>{loading?'loading':'Sign Up'}</button>
+                <button disabled={loading} className={` w-full border-none p-4 text-white rounded-[5px] cursor-pointer ${loading? "bg-[#1f8ff161]": "bg-[#1f8ef1]"} font-medium`}>{loading?'loading':'Sign Up'}</button>
             </form>
         </div>
     </div>
