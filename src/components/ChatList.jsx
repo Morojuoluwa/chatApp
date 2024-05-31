@@ -8,13 +8,17 @@ const ChatList = () => {
 
     const [addMode, setAddMode] = useState(false)
     const [chats, setChats] = useState([])
+
     const {currentUser} = useUserStore()
 
     useEffect(()=>{
-        const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async (res)=>{
-           const items = res.data().chat
+        const unSub = onSnapshot(doc(db, "userschat", currentUser.id), async (reps)=>{
+           const items = reps.data().chats
+          // console.log(reps.data())
 
-           const promises = items.map(async(item)=>{
+          //  console.log(items)
+
+           const promises = items.map(async(item) =>{
             const userDocRef = doc(db, "users", item.receiverId);
             const userDocSnap = await getDoc(userDocRef);
 
@@ -32,7 +36,7 @@ const ChatList = () => {
             unSub()
         }
     },[currentUser.id])
-    console.log(chats)
+    // console.log(chats)
   return (
     <div >
       <div className='flex items-center gap-x-5 p-3'>
@@ -47,11 +51,11 @@ const ChatList = () => {
       <div className=' max-h-[40vh] overflow-y-scroll scrol'>
 
       {chats.map((chat)=>(
-         <div key={chat.chatid} className='item'>
-            <img className='emg' src="./avatar.png" alt="" />
+         <div key={chat.chatId} className='item'>
+            <img className='emg' src={chat.user.avatar||"./avatar.png"} alt="" />
             <div>
-                <span className=' font-medium'>jane doe</span>
-                <p className=' font-normal text-[10px]'>{chat.lastmessage}</p>
+                <span className=' font-medium'>{chat.user.username}</span>
+                <p className=' font-normal text-[10px]'>{chat.lastMessage}</p>
             </div>
          </div>
       ))}

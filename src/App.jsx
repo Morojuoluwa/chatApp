@@ -24,7 +24,7 @@ const App = () => {
       unSub()
     }
   },[fetchUserInfo])
-  console.log(currentUser)
+  // console.log(currentUser)
   
 
   if(isLoading) return <div className='p-4 text-[36px] rounded-[10px] bg-[rgba(17,25,40,0.9)]'>Loading...</div>

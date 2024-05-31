@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { auth, db } from '../lib/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import upload from '../lib/upload'
-import { useUserStore } from '../lib/userStore'
+
 
 
 const Login = () => {
@@ -40,7 +40,7 @@ const Login = () => {
 
     try{
       const res = await createUserWithEmailAndPassword(auth, email, password)
-      toast.success("e don enter")
+      // toast.success("e don enter")
 
       const imgUrl = await upload(avatar.file)
 
@@ -54,7 +54,7 @@ const Login = () => {
 
       
       await setDoc(doc(db, "userschat", res.user.uid),{
-       chat:[]
+       chats: [],
       })
 
 
