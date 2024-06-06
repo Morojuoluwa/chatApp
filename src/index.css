@@ -40,14 +40,14 @@ body{
 }
 
 .message{
-  @apply max-w-[70%] flex gap-4 
+  @apply w-[40%] flex gap-4
 }
 .message img{
   @apply w-7 h-7 rounded-[50%] object-cover
 }
 
 .own{
-  align-self: flex-end;
+  @apply self-end
 }
 
 .own p{

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import AddUser from './AddUser'
 import { useUserStore } from '../lib/userStore'
-import { doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../lib/firebase'
+import { useChatStore } from '../lib/chatStore'
 
 const ChatList = () => {
 
@@ -11,12 +12,12 @@ const ChatList = () => {
 
     const {currentUser} = useUserStore()
 
+    const {chatId,changeChat} = useChatStore()
+console.log(chatId)
     useEffect(()=>{
         const unSub = onSnapshot(doc(db, "userschat", currentUser.id), async (reps)=>{
            const items = reps.data().chats
-          // console.log(reps.data())
-
-          //  console.log(items)
+          
 
            const promises = items.map(async(item) =>{
             const userDocRef = doc(db, "users", item.receiverId);
@@ -36,7 +37,31 @@ const ChatList = () => {
             unSub()
         }
     },[currentUser.id])
-    // console.log(chats)
+
+    const handleSelect = async (chat) =>{
+      
+
+      const userChats = chats.map((item)=>{
+        const {user, ...rest} = item
+        return rest})
+
+        const chatIndex = userChats.findIndex((item)=>item.chatId === chat.chatId)
+        userChats[chatIndex].isSeen = true
+
+        const userChatRef = doc(db, "userschat", currentUser.id)
+
+        try{
+          await updateDoc(userChatRef, {
+            chats:userChats
+          })
+          changeChat(chat.chatId, chat.user)
+        }catch{
+
+        }
+      
+    
+    }
+
   return (
     <div >
       <div className='flex items-center gap-x-5 p-3'>
@@ -51,7 +76,7 @@ const ChatList = () => {
       <div className=' max-h-[40vh] overflow-y-scroll scrol'>
 
       {chats.map((chat)=>(
-         <div key={chat.chatId} className='item'>
+         <div key={chat.chatId} style={{backgroundColor:chat.isSeen?'transparent':"#5183fe"}} className='item' onClick={()=>handleSelect(chat)}>
             <img className='emg' src={chat.user.avatar||"./avatar.png"} alt="" />
             <div>
                 <span className=' font-medium'>{chat.user.username}</span>
